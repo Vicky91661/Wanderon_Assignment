@@ -1,7 +1,7 @@
 const express = require("express");
 
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = require("../../config");
+const { JWT_SECRET } = process.env.JWT_SECRET;
 
 const userAuth = (req,res,next)=>{
     const authHeader = req.headers.authorization;
@@ -16,8 +16,6 @@ const userAuth = (req,res,next)=>{
     
     try {
         const decode = jwt.verify(token,JWT_SECRET)
-        // const userId =decode.userId
-        //console.log(decode)
         next()
     } catch (error) {
         return res.status(411).json({
