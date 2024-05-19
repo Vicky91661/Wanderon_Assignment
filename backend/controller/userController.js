@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const {z} = require("zod")
 const bcrypt = require('bcrypt');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const {User} = require("../db/Schema");
 const  JWT_SECRET  = process.env.JWT_SECRET;
@@ -24,6 +25,10 @@ const userSignup =z.object({
 
 const Signin = async (req,res)=>{
     console.log("requested body is",req.body)
+    mongoSanitize.sanitize(req.body,{
+        allowDots: true,
+    });
+
     const email =req.body.email
     const password =req.body.password
     
@@ -69,7 +74,11 @@ const Signin = async (req,res)=>{
 }
 
 const Signup = async (req,res)=>{
-   
+
+    mongoSanitize.sanitize(req.body,{
+        allowDots: true,
+      });
+
     const email =req.body.email
     const password =req.body.password
     const firstName =req.body.firstName
