@@ -8,12 +8,12 @@ function Signin() {
     password:"",
     
 })
-const [error,setError]=useState("")
+
   return (
     <div>
       <Background/>
       <div className=' absolute z-20  left-1/2  top-[40%]  -translate-x-1/2'>
-          <LoginCard data={signInData} setData={setSignInData} isLogin={true} error={error} setError={setError}/>
+          <LoginCard data={signInData} setData={setSignInData} isLogin={true}/>
       </div>
     </div>
   );

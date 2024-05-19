@@ -1,36 +1,57 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useSendingAuthData from '../hooks/useSendingAuthData';
 
-function LoginCard({ data, setData, error, setError, isLogin }) {
+function LoginCard({ data, setData, isLogin }) {
 
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
 
-    function sendData(e) {
+    const [loading,setLoading] = useState(false)
+    const [error,setError]=useState("")
+    
+
+    const sendData= (e) => {
         e.preventDefault();
-        // axios.post("https://paytm-basic-clone-backend.vercel.app/api/v1/user/signin", loginData)
-        //     .then((data) => {
-        //         const authorization = data.data.token;
-        //         localStorage.setItem('authorization', authorization);
+        setLoading(true);
+        if(isLogin){
+            const [responseLoading,responseError]=useSendingAuthData(`http://localhost:5173/api/v1/user/Signin`,data);
+            setLoading(responseLoading);
+            setError(responseError);
+            // axios.post("http://localhost:5173/api/v1/user/signin", data)
+            // .then((response) => {
+            //     const authorization = response.data.token;
+            //     localStorage.setItem('authorization', authorization);
+            //     navigate("/dashboard")
+            // }).catch((error) => {
+            //     console.log("error is =>", error)
+            //     setError(error.response.data.message)
+            //     console.log(error.response.data.message)
+            // }).finally(()=>{
+            //     setLoading(false)
+            // })
 
-        //         setData(
-        //             () => ({
-        //                 firstName: data.data.firstName,
-        //                 lastName: data.data.lastName,
-        //                 userId: data.data.userId,
-        //                 balance: data.data.balance
-        //             })
-        //         )
-        //         navigate("/dashboard")
-        //     }).catch((error) => {
-        //         console.log("error is =>", error)
-        //         setError(error.response.data.message)
-        //         console.log(error.response.data.message)
-        //     })
-        console.log(data)
+            
+        }else{
+            const [responseLoading,responseError]=useSendingAuthData(`http://localhost:5173/api/v1/user/Signup`,data)
+            setLoading(responseLoading);
+            setError(responseError);
+            // axios.post("http://localhost:5173/api/v1/user/signup", data)
+            // .then((data) => {
+            //     const authorization = data.data.token;
+            //     localStorage.setItem('authorization', authorization);
+            //     navigate("/dashboard")
+            // }).catch((error) => {
+            //     console.log("error is =>", error)
+            //     setError(error.response.data.message)
+            //     console.log(error.response.data.message)
+            // }).finally(()=>{
+            //     setLoading(false)
+            // })
+        }
     }
 
-    function changeForm(e) {
+    const  changeForm = (e) => {
         if (error) {
             setError("")
         }
@@ -39,6 +60,13 @@ function LoginCard({ data, setData, error, setError, isLogin }) {
             ...prevData,
             [name]: value
         }));
+    }
+    const changePage = () => {
+        if(isLogin){
+            navigate("/signup")
+        }else{
+            navigate("/signin")
+        }
     }
 
     return (
@@ -112,17 +140,27 @@ function LoginCard({ data, setData, error, setError, isLogin }) {
                             </div>
                         </div>
                     )}
-                    <button
+                    {
+                        loading? 
+                        <button
                         type="submit"
                         className="w-full bg-purple-700 text-white py-1 md:py-2 rounded-md font-semibold hover:bg-pink-600 transition duration-200"
-                    >
-                        {isLogin ? "Sign In" : "Sign Up"}
-                    </button>
+                        >
+                            loading...
+                        </button>: 
+                        <button
+                        type="submit"
+                        className="w-full bg-purple-700 text-white py-1 md:py-2 rounded-md font-semibold hover:bg-pink-600 transition duration-200"
+                        >
+                            {isLogin ? "Sign In" : "Sign Up"}
+                        </button>
+                    }
+                   
                     <p className="md:mb-4 text-white mt-3">
                         {isLogin ? "If you do not have an account, you can " : "If you already have an account, you can "}
-                        <a href="/login" className="text-purple-200 font-semibold">
+                        <p  className="text-purple-200 font-semibold inline-block cursor-pointer" onClick={changePage}>
                             {isLogin ? "Sign Up here!" : "Sign In here!"}
-                        </a>
+                        </p>
                     </p>
                     {error && error.map((e, index) => (
                         <div key={index} className='text-red-600'>{e}</div>
