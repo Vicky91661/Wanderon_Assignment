@@ -1,30 +1,26 @@
-import { useEffect, useState } from "react"
+import { useState } from "react";
+import axios from 'axios';
 
-function useSendingAuthData(url,sendData) {
-
-    const [loading,setLoading]=useState(false)
-    const [error,setError]=useState("")
-
-    const fetchSendingAuthData= async()=>{
+function useSendingAuthData() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+   
+    const fetchSendingAuthData = async (url, sendData) => {
+        setError("")
         setLoading(true);
         try {
-            const response = await axios.post(url,sendData);
+            const response = await axios.post(url, sendData);
             console.log(response);
             const authorization = response.data.token;
             localStorage.setItem('authorization', authorization);
-
         } catch (error) {
-            console.log("error is =>", error)
-            setError(error.response.data.message)
-            
-        }finally{
-            setLoading(false)
+            setError(error.response.data.message);
+        } finally {
+            setLoading(false);
         }
-    }
-    useEffect(()=>{
-        fetchSendingAuthData()
-    },[])
-  return [data,loading,error];
+    };
+
+    return [fetchSendingAuthData, loading, error];
 }
 
 export default useSendingAuthData;

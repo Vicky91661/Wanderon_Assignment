@@ -7,7 +7,7 @@ import logo from "/logo.png"
 function Background() {
   return (
     <div className="relative w-full h-[100vh] text-white overflow-hidden ">
-      <div className="absolute z-20 top-3 md:top-1 left-4 md:left-12">
+      <div className="absolute z-20 top-2 md:top-1 left-4 md:left-12">
         <img className='w-20 md:w-32' src={logo} alt="" />
       </div>
       

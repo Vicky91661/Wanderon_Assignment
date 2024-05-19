@@ -4,7 +4,7 @@ require('dotenv').config();
 mongoose.connect(`mongodb+srv://${process.env.MONOGOOS_USER}:${process.env.MONOGOOS_PASSWORD}@cluster0.ufffkaf.mongodb.net/${process.env.MONOGOOS_DATABASE}`)
 
 const userSchema = new mongoose.Schema({
-    username: {
+    email: {
         type: String,
         required: true,
         unique: true,

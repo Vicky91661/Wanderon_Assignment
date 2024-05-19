@@ -1,4 +1,4 @@
-import axios from 'axios';
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSendingAuthData from '../hooks/useSendingAuthData';
@@ -6,55 +6,20 @@ import useSendingAuthData from '../hooks/useSendingAuthData';
 function LoginCard({ data, setData, isLogin }) {
 
     const navigate = useNavigate();
-
-    const [loading,setLoading] = useState(false)
-    const [error,setError]=useState("")
     
-
-    const sendData= (e) => {
+    const [fetchSendingAuthData, loading, error] = useSendingAuthData(); 
+    const sendData= async (e) => {
         e.preventDefault();
-        setLoading(true);
-        if(isLogin){
-            const [responseLoading,responseError]=useSendingAuthData(`http://localhost:5173/api/v1/user/Signin`,data);
-            setLoading(responseLoading);
-            setError(responseError);
-            // axios.post("http://localhost:5173/api/v1/user/signin", data)
-            // .then((response) => {
-            //     const authorization = response.data.token;
-            //     localStorage.setItem('authorization', authorization);
-            //     navigate("/dashboard")
-            // }).catch((error) => {
-            //     console.log("error is =>", error)
-            //     setError(error.response.data.message)
-            //     console.log(error.response.data.message)
-            // }).finally(()=>{
-            //     setLoading(false)
-            // })
-
-            
-        }else{
-            const [responseLoading,responseError]=useSendingAuthData(`http://localhost:5173/api/v1/user/Signup`,data)
-            setLoading(responseLoading);
-            setError(responseError);
-            // axios.post("http://localhost:5173/api/v1/user/signup", data)
-            // .then((data) => {
-            //     const authorization = data.data.token;
-            //     localStorage.setItem('authorization', authorization);
-            //     navigate("/dashboard")
-            // }).catch((error) => {
-            //     console.log("error is =>", error)
-            //     setError(error.response.data.message)
-            //     console.log(error.response.data.message)
-            // }).finally(()=>{
-            //     setLoading(false)
-            // })
+        try {
+            const url = isLogin ? 'http://localhost:3000/api/v1/user/signin' : 'http://localhost:3000/api/v1/user/signup';
+            await fetchSendingAuthData(url, data);
+        } catch (error) {
+            console.log("error is =>", error.response.data.message);
         }
     }
 
     const  changeForm = (e) => {
-        if (error) {
-            setError("")
-        }
+        
         const { name, value } = e.target;
         setData(prevData => ({
             ...prevData,
@@ -72,7 +37,7 @@ function LoginCard({ data, setData, isLogin }) {
     return (
         <div className="flex items-center justify-center w-[300px] md:w-[700px] bg-black bg-opacity-40 md:px-4 rounded-lg shadow-2xl">
             <div className="bg-transparent p-2 px-4 md:p-8 rounded-3xl shadow-lg w-[600px] ">
-                <h2 className="text-2xl md:text-3xl font-medium mb-2 md:mb-4 text-white">{isLogin ? "Sign In" : "Sign Up"}</h2>
+                <h2 className="text-xl md:text-3xl font-medium mb-2 md:mb-4 text-white">{isLogin ? "Sign In" : "Sign Up"}</h2>
                 <form onSubmit={sendData}>
                     <div className='flex flex-col md:flex-row gap-2 md:gap-5 md:justify-between '>
                         <div className=" mb-1 md:mb-4 w-full">
@@ -156,14 +121,14 @@ function LoginCard({ data, setData, isLogin }) {
                         </button>
                     }
                    
-                    <p className="md:mb-4 text-white mt-3">
+                    <p className="md:mb-4 text-white mt-3 text-sm md:text-base">
                         {isLogin ? "If you do not have an account, you can " : "If you already have an account, you can "}
                         <p  className="text-purple-200 font-semibold inline-block cursor-pointer" onClick={changePage}>
                             {isLogin ? "Sign Up here!" : "Sign In here!"}
                         </p>
                     </p>
                     {error && error.map((e, index) => (
-                        <div key={index} className='text-red-600'>{e}</div>
+                        <div key={index} className='text-red-600 text-sm md:text-base md:font-medium'>{e}</div>
                     ))}
                 </form>
             </div>

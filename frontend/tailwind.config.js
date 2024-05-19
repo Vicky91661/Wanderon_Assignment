@@ -13,7 +13,7 @@ export default {
         },
         wiggle2: {
           '0% ': { top:'50%', fontSize: '70px' },
-          '100%': { top:'25%',fontSize: '90px' },
+          '100%': { top:'21%',fontSize: '80px' },
         },
         wiggle3: {
           '0% ': { top:'50%', fontSize: '100px' },
