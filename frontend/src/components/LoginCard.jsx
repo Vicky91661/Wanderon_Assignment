@@ -11,7 +11,7 @@ function LoginCard({ data, setData, isLogin }) {
     const sendData= async (e) => {
         e.preventDefault();
         try {
-            const url = isLogin ? 'http://localhost:3000/api/v1/user/signin' : 'http://localhost:3000/api/v1/user/signup';
+            const url = isLogin ? 'https://wanderon-assignment.vercel.app/api/v1/user/signin' : 'https://wanderon-assignment.vercel.app/api/v1/user/signup';
             await fetchSendingAuthData(url, data);
         } catch (error) {
             console.log("error is =>", error.response.data.message);
